@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "aiarmy",
+	"version": "${version}",
+	"name": "AI Army",
+	"description": "AI Army singleplayer prototype for Minecraft Java 26.2",
+	"authors": ["AI Army Project"],
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.aiarmy.fabric.AIArmyFabric"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
