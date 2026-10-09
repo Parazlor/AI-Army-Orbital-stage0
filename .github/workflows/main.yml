@@ -1,4 +1,3 @@
-
 name: Build AI Army Orbital Stage 0
 
 on:
@@ -9,47 +8,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Find and extract source ZIP
-        run: |
-          mkdir -p source
-          ZIP=$(find . -maxdepth 1 -type f -iname '*.zip' | head -n 1)
-          if [ -z "$ZIP" ]; then
-            echo "Source ZIP not found in repository root"
-            exit 1
-          fi
-          unzip -q "$ZIP" -d source
-          find source -maxdepth 4 -type f | head -100
-
-      - name: Set up Java 25
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build Paper and Fabric
-        working-directory: source
+      - name: Build
         run: |
-          BUILD_FILE=$(find . -name settings.gradle -o -name settings.gradle.kts | head -n 1)
-          if [ -z "$BUILD_FILE" ]; then
-            echo "Gradle settings file not found"
-            exit 1
-          fi
-          cd "$(dirname "$BUILD_FILE")"
-          gradle build --no-daemon
+          chmod +x ./gradlew
+          ./gradlew build --stacktrace
 
-      - name: Upload JAR files
-        if: success()
+      - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: ai-army-orbital-stage0-jars
-          path: |
-            source/**/*.jar
+          name: AIArmy-Fabric-26.2
+          path: build/libs/*.jar
           if-no-files-found: error
